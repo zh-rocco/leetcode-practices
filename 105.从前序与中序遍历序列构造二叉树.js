@@ -102,12 +102,10 @@ var buildTree = function (preorder, inorder) {
     this.left = this.right = null;
   }
 
-  const preorderLen = preorder.length
-  const inorderLen = inorder.length
   let point = 0
 
   function recursion(inorderLeft, inorderRight) {
-    if (point > preorderLen - 1 || inorderLeft > inorderRight) {
+    if (point > preorder.length - 1 || inorderLeft > inorderRight) {
       return null
     }
 
@@ -115,29 +113,29 @@ var buildTree = function (preorder, inorder) {
     const res = new TreeNode(rootVal)
     let rootValPoint = 0
 
-    for (let i = inorderLeft; i < inorderRight; i++) {
+    for (let i = inorderLeft; i <= inorderRight; i++) {
       if (inorder[i] === rootVal) {
         rootValPoint = i
         break
       }
     }
 
-    if (inorderLeft < rootValPoint - 1) {
+    if (inorderLeft < inorderRight && inorderLeft < rootValPoint) {
+      // console.log('+', point, rootValPoint, inorderLeft, inorderRight)
       point++
       res.left = recursion(inorderLeft, rootValPoint - 1)
     }
 
-    if (rootValPoint + 1 < inorderRight) {
+    if (inorderLeft < inorderRight && rootValPoint < inorderRight) {
+      // console.log('-', point, rootValPoint, inorderLeft, inorderRight)
       point++
       res.right = recursion(rootValPoint + 1, inorderRight)
     }
 
-
-
     return res
   }
 
-  return recursion(0, inorderLen - 1)
+  return recursion(0, inorder.length - 1)
 };
 // @lc code=end
 
